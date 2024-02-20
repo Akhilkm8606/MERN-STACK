@@ -2,18 +2,19 @@ const mongoose = require('mongoose');
 
 // Define the user schema
 const userSchema = new mongoose.Schema({
-    username: {
+    fullname: {
         type: String,
-        required: true
+        minLength: [4, "Full name should have a minimum of 4 characters"],
+        maxLength: [16, "Full name should have a maximum of 16 characters"],
+        required: [true, "Please enter your full name"]
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, "Please enter your email"],
+        unique: true,
     },
     password: {
         type: String,
-        required: true
     }
 });
 

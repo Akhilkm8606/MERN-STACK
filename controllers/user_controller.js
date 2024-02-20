@@ -7,17 +7,21 @@ exports.getSignUp = async (req, res) => {
 };
 
 exports.postSignUp = async (req, res) => {
-    const { username, email, password } = req.body;
+
+    const { fullname, email, password } = req.body;
     try {
         // Check if password is provided
+
         if (!password) {
             return res.status(400).json({
                 success: false,
                 message: "Password is required"
             });
+         
         }
 
-        // Hash the password
+        console.log(!password);
+        // Hash the password with the specified number of salt rounds
         const hashedPass = await bcrypt.hash(password, saltround);
 
         // Log the hashed password
@@ -25,7 +29,7 @@ exports.postSignUp = async (req, res) => {
 
         // Create user with hashed password
         const user = await User.create({
-            username,
+            fullname,
             email,
             password: hashedPass
         });
@@ -37,14 +41,13 @@ exports.postSignUp = async (req, res) => {
                 message: "User registration failed"
             });
         }
-
-        // Respond with success message and user details
         res.status(201).json({
+
             success: true,
             message: "Registration successful!",
             isAuthenticated: true,
             user: {
-                username: user.username,
+                fullname: user.fullname,
                 email: user.email,
                 // Note: Avoid sending the password in response for security reasons
             }
@@ -59,6 +62,7 @@ exports.postSignUp = async (req, res) => {
         });
     }
 };
+
 exports.getLogin = async (req, res) => {
     res.send("Welcome to the Login page");
 };
